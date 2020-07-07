@@ -75,7 +75,6 @@ public class ComposeFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pd.show();
                 String description = etDescription.getText().toString();
                 if (description.isEmpty()) {
                     Toast.makeText(getContext(), "Description cannot be empty.", Toast.LENGTH_SHORT).show();
@@ -154,12 +153,14 @@ public class ComposeFragment extends Fragment {
         post.setDescription(description);
         post.setImage(new ParseFile(photoFile));
         post.setUser(currentUser);
+        pd.show();
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error while saving", e);
                     Toast.makeText(getContext(), "Error while saving", Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
                 }
                 Log.i(TAG, "Post was successfully saved");
                 etDescription.setText(null);

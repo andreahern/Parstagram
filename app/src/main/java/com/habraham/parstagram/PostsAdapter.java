@@ -1,11 +1,12 @@
 package com.habraham.parstagram;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.parse.ParseFile;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+    private static final String TAG = "PostsAdapter";
+
     private Context context;
     private List<Post> posts;
 
@@ -73,6 +78,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if (image != null) {
                 Glide.with(context).load(post.getImage().getUrl()).into(ivPost);
             }
+
+            ivPost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i(TAG, "onClick");
+                    int position = getAdapterPosition();
+                    Post post = posts.get(position);
+                    Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("Post", post.getObjectId());
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }

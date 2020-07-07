@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.habraham.parstagram.fragments.ComposeFragment;
 import com.habraham.parstagram.fragments.PostsFragment;
+import com.habraham.parstagram.fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.Profile:
                     default:
-                        fragment = new ComposeFragment();
+                        fragment = new ProfileFragment();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();

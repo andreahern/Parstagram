@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,7 +28,7 @@ import java.util.List;
 public class PostsFragment extends Fragment {
     private static final String TAG = "PostsFragment";
 
-    private RecyclerView rvPosts;
+    protected RecyclerView rvPosts;
     protected SwipeRefreshLayout swipeContainer;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
@@ -51,7 +52,7 @@ public class PostsFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
         queryPosts();
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

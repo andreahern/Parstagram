@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="5dp"
     tools:context=".fragments.PostsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,8 +21,8 @@
             android:layout_alignParentTop="true"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
-            app:titleTextColor="@android:color/white"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="@android:color/white">
 
             <ImageView
                 android:id="@+id/ivToolbarLogo"

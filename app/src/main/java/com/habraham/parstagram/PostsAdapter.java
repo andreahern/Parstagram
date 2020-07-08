@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.habraham.parstagram.fragments.DetailFragment;
 import com.parse.ParseFile;
 import java.util.List;
 
@@ -82,9 +84,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     Log.i(TAG, "onClick");
                     int position = getAdapterPosition();
                     Post post = posts.get(position);
-                    Intent i = new Intent(context, DetailActivity.class);
-                    i.putExtra("Post", post.getObjectId());
-                    context.startActivity(i);
+//                    Intent i = new Intent(context, DetailActivity.class);
+//                    i.putExtra("Post", post.getObjectId());
+//                    context.startActivity(i);
+                    DetailFragment detailFragment = new DetailFragment(post.getObjectId());
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, detailFragment).addToBackStack(null).commit();
                 }
             });
         }

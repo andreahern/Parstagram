@@ -57,7 +57,7 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         etDescription = view.findViewById(R.id.etDescription);
         btnTakePic = view.findViewById(R.id.btnTakePic);
-        ivPostImage = view.findViewById(R.id.ivPostImage);
+        ivPostImage = view.findViewById(R.id.ivProfileImage);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         final ProgressDialog pd = new ProgressDialog(getContext());

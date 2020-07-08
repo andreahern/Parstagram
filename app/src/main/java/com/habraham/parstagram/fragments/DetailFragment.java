@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DetailFragment extends Fragment implements View.OnClickListener {
-    Post post;
+    Post mPost;
     String objectId;
     TextView tvUsername;
     TextView tvDescription;
@@ -40,8 +41,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-    public DetailFragment(String objectId) {
-        this.objectId = objectId;
+    public DetailFragment(Post post) {
+        mPost = post;
     }
 
     @Override
@@ -68,27 +69,18 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setPost(final String postID) {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_OBJECT_ID, postID);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                post = posts.get(0);
-                tvUsername.setText(post.getUser().getUsername());
-                tvDescription.setText(post.getDescription());
-                tvTime.setText(setTime(post.getCreatedAt().toString()));
+        tvUsername.setText(mPost.getUser().getUsername());
+        tvDescription.setText(mPost.getDescription());
+        tvTime.setText(setTime(mPost.getCreatedAt().toString()));
 
-                if (post.getImage() != null)
-                    Glide.with(getContext()).load(post.getImage().getUrl()).into(ivPost);
+        if (mPost.getImage() != null)
+            Glide.with(getContext()).load(mPost.getImage().getUrl()).into(ivPost);
 
-                ParseFile profilePic = post.getUser().getParseFile("profilePic");
-                if (profilePic != null)
-                    Glide.with(getContext()).load(profilePic.getUrl()).into(ivProfile);
-                else
-                    Glide.with(getContext()).load(R.drawable.default_pic).into(ivProfile);
-            }
-        });
+        ParseFile profilePic = mPost.getUser().getParseFile("profilePic");
+        if (profilePic != null)
+            Glide.with(getContext()).load(profilePic.getUrl()).into(ivProfile);
+        else
+            Glide.with(getContext()).load(R.drawable.default_pic).into(ivProfile);
     }
 
     private String setTime(String createdAt) {
@@ -113,7 +105,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.ivProfile:
             case R.id.tvUsername:
-                ProfileFragment profileFragment = ProfileFragment.newInstance(post.getObjectId());
+                ProfileFragment profileFragment = ProfileFragment.newInstance(mPost.getUser());
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContainer, profileFragment);
                 fragmentTransaction.addToBackStack(null);

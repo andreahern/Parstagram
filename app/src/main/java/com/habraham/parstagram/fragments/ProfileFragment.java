@@ -45,10 +45,10 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {}
 
-    public static ProfileFragment newInstance(String postId) {
+    public static ProfileFragment newInstance(ParseUser user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString("postId", postId);
+        args.putParcelable("user", user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,20 +57,9 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            String postId = getArguments().getString("postId");
-
-            ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-            query.include(Post.KEY_USER);
-            query.getInBackground(postId, new GetCallback<Post>() {
-                @Override
-                public void done(Post post, ParseException e) {
-                    if (e == null) {
-                        user = post.getUser();
-                        Log.d(TAG, "onCreate: " + user.getUsername());
-                        queryPosts();
-                    }
-                }
-             });
+            ParseUser pUser = getArguments().getParcelable("user");
+            user = pUser;
+            queryPosts();
         } else queryPosts();
     }
 

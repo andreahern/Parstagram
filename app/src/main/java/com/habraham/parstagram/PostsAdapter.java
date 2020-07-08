@@ -87,7 +87,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 //                    Intent i = new Intent(context, DetailActivity.class);
 //                    i.putExtra("Post", post.getObjectId());
 //                    context.startActivity(i);
-                    DetailFragment detailFragment = new DetailFragment(post.getObjectId());
+                    DetailFragment detailFragment = new DetailFragment(post);
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, detailFragment).addToBackStack(null).commit();
                 }

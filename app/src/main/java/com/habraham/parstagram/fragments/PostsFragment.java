@@ -1,20 +1,19 @@
 package com.habraham.parstagram.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
 import com.habraham.parstagram.Post;
 import com.habraham.parstagram.PostsAdapter;
 import com.habraham.parstagram.R;
@@ -23,6 +22,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PostsFragment extends Fragment {
@@ -32,6 +32,7 @@ public class PostsFragment extends Fragment {
     protected SwipeRefreshLayout swipeContainer;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
+    protected EndlessRecyclerViewScrollListener scrollListener;
 
     public PostsFragment() {
         // Required empty public constructor
@@ -52,9 +53,9 @@ public class PostsFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
-        queryPosts();
+        GridLayoutManager glm = new GridLayoutManager(getContext(), 3);
+        rvPosts.setLayoutManager(glm);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -68,6 +69,17 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(glm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextQueryPosts(allPosts.get(allPosts.size()-1).getCreatedAt());
+            }
+        };
+
+        rvPosts.addOnScrollListener(scrollListener);
+
+        queryPosts();
     }
 
     protected void queryPosts() {
@@ -89,6 +101,28 @@ public class PostsFragment extends Fragment {
                 adapter.clear();
                 adapter.addAll(posts);
                 swipeContainer.setRefreshing(false);
+            }
+        });
+    }
+
+    protected void loadNextQueryPosts(Date maxCreatedAt) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(20);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.whereLessThan(Post.KEY_CREATED_AT, maxCreatedAt);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting next posts: ", e);
+                    return;
+                }
+
+                for (Post post : posts) {
+                    Log.i(TAG, "Next Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+                adapter.addAll(posts);
             }
         });
     }

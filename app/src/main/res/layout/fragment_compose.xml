@@ -21,7 +21,7 @@
 
             <ImageView
                 android:id="@+id/ivToolbarLogo"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"

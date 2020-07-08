@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -32,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvUsername;
     TextView tvDescription;
     TextView tvTime;
+    ImageView ivProfile;
     ImageView ivPost;
 
     @Override
@@ -42,7 +44,8 @@ public class DetailActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.tvUsername);
         tvDescription = findViewById(R.id.tvDescription);
         tvTime = findViewById(R.id.tvTime);
-        ivPost = findViewById(R.id.ivPostImage);
+        ivProfile = findViewById(R.id.ivProfile);
+        ivPost = findViewById(R.id.ivProfileImage);
 
         String postID = getIntent().getStringExtra("Post");
         setPost(postID);
@@ -60,7 +63,15 @@ public class DetailActivity extends AppCompatActivity {
                 tvUsername.setText(post.getUser().getUsername());
                 tvDescription.setText(post.getDescription());
                 tvTime.setText(setTime(post.getCreatedAt().toString()));
-                Glide.with(DetailActivity.this).load(post.getImage().getUrl()).into(ivPost);
+
+                if (post.getImage() != null)
+                    Glide.with(DetailActivity.this).load(post.getImage().getUrl()).into(ivPost);
+
+                ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+                if (profilePic != null)
+                    Glide.with(DetailActivity.this).load(profilePic.getUrl()).into(ivProfile);
+                else
+                    Glide.with(DetailActivity.this).load(R.drawable.default_pic).into(ivProfile);
             }
         });
     }

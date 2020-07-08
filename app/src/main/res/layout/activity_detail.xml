@@ -36,32 +36,42 @@
         android:id="@id/llPostInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar"
-        >
+        app:layout_constraintTop_toBottomOf="@id/appBar">
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="2"
+            tools:srcCompat="@tools:sample/avatars[1]" />
+
         <TextView
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_weight="6"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_weight="1"
             tools:text="Abraham" />
 
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            tools:text="7m"
-            android:gravity="end"/>
+            android:layout_weight="2"
+            android:gravity="end"
+            tools:text="7m" />
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/ivPostImage"
+        android:id="@+id/ivProfileImage"
         android:layout_width="0dp"
         android:layout_height="300dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

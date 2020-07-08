@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.habraham.parstagram.LoginActivity;
 import com.habraham.parstagram.Post;
@@ -67,6 +68,14 @@ public class ProfileFragment extends PostsFragment {
                         Intent i = new Intent(getContext(), LoginActivity.class);
                         startActivity(i);
                         getActivity().onBackPressed();
+                        return true;
+                    case R.id.setProfilePic:
+                        Toast.makeText(getContext(), "set Profile", Toast.LENGTH_SHORT).show();
+                        SetProfilePictureFragment profilePictureFragment = new SetProfilePictureFragment();
+                        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.flContainer, profilePictureFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
                         return true;
                 }
                 return false;

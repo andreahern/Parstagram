@@ -47,7 +47,7 @@ public class ComposeFragment extends Fragment {
     private Button btnSubmit;
 
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-    private File photoFile;
+    protected File photoFile;
     public String photoFileName = "photo.jpg";
 
     public ComposeFragment() {}
@@ -98,7 +98,7 @@ public class ComposeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_compose, container, false);
     }
 
-    private void launchCamera() {
+    protected void launchCamera() {
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference for future access

@@ -5,11 +5,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -60,6 +62,7 @@ public class PostsFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                adapter.clear();
                 queryPosts();
             }
         });
@@ -73,7 +76,7 @@ public class PostsFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(glm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextQueryPosts(allPosts.get(allPosts.size()-1).getCreatedAt());
+                loadNextQueryPosts(page);
             }
         };
 
@@ -98,19 +101,19 @@ public class PostsFragment extends Fragment {
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
-                adapter.clear();
+//                adapter.clear();
                 adapter.addAll(posts);
                 swipeContainer.setRefreshing(false);
             }
         });
     }
 
-    protected void loadNextQueryPosts(Date maxCreatedAt) {
+    protected void loadNextQueryPosts(int page) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
-        query.whereLessThan(Post.KEY_CREATED_AT, maxCreatedAt);
+        query.setSkip(20 * page);
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {

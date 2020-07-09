@@ -38,6 +38,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     TextView tvTime;
     ImageView ivProfile;
     ImageView ivPost;
+    ImageView ivFav;
+    ImageView ivComment;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -56,6 +58,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         tvTime = view.findViewById(R.id.tvTime);
         ivProfile = view.findViewById(R.id.ivProfile);
         ivPost = view.findViewById(R.id.ivProfileImage);
+        ivFav = view.findViewById(R.id.ivFav);
+        ivComment = view.findViewById(R.id.ivComment);
 
         ivProfile.setOnClickListener(this);
         tvUsername.setOnClickListener(this);
@@ -69,6 +73,20 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 getFragmentManager().popBackStackImmediate();
+            }
+        });
+
+        ivFav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Favorite", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Comment", Toast.LENGTH_SHORT).show();
             }
         });
     }

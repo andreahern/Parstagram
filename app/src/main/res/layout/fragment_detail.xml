@@ -63,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="end"
+            android:paddingEnd="5dp"
             tools:text="7m" />
     </LinearLayout>
 
@@ -85,4 +86,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivProfileImage"
         tools:text="Description" />
+
+    <LinearLayout
+        android:id="@+id/actionBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription">
+
+        <ImageView
+            android:id="@+id/ivFav"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ufi_heart"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/tvFavCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            tools:text="70" />
+
+        <ImageView
+            android:id="@+id/ivComment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ufi_comment" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

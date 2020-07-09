@@ -155,6 +155,7 @@ public class ProfileFragment extends Fragment {
                 return false;
             }
         });
+        queryPosts();
     }
 
     protected void loadNextQueryPosts(Date maxCreatedAt) {

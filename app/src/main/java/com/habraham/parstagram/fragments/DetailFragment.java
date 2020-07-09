@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.habraham.parstagram.Post;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
@@ -62,7 +63,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         setPost(objectId);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.menu_profile);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -90,9 +90,9 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         ParseFile profilePic = mPost.getUser().getParseFile("profilePic");
         if (profilePic != null)
-            Glide.with(getContext()).load(profilePic.getUrl()).into(ivProfile);
+            Glide.with(getContext()).load(profilePic.getUrl()).transform(new CircleCrop()).into(ivProfile);
         else
-            Glide.with(getContext()).load(R.drawable.default_pic).into(ivProfile);
+            Glide.with(getContext()).load(R.drawable.default_pic).transform(new CircleCrop()).into(ivProfile);
     }
 
     private String setTime(String createdAt) {

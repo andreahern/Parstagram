@@ -19,18 +19,26 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.habraham.parstagram.Like;
 import com.habraham.parstagram.Post;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class DetailFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "DetailFragment";
     Post mPost;
     String objectId;
     TextView tvUsername;
@@ -76,10 +84,41 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+
         ivFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Favorite", Toast.LENGTH_SHORT).show();
+                if (Post.IDsofPostsLikedByCurrentUser.contains(mPost.getObjectId())) {
+                    Log.i(TAG, "onClick: " + mPost.getObjectId());
+                    ParseQuery<Like> findLike = ParseQuery.getQuery(Like.class);
+                    findLike.whereEqualTo(Like.KEY_USER, ParseUser.getCurrentUser());
+                    findLike.whereEqualTo(Like.KEY_POST, mPost);
+                    findLike.getFirstInBackground(new GetCallback<Like>() {
+                        @Override
+                        public void done(Like like, ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "done: ", e);
+                                return;
+                            }
+                            Log.i(TAG, "done: " + like.getPost().getObjectId());
+                            like.deleteInBackground();
+                            Glide.with(getContext()).load(R.drawable.ufi_heart).into(ivFav);
+                            Post.IDsofPostsLikedByCurrentUser.remove(mPost.getObjectId());
+                        }
+                    });
+                } else {
+                    final Like like = new Like();
+                    like.setPost(mPost);
+                    like.setUser(ParseUser.getCurrentUser());
+                    like.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            Glide.with(getContext()).load(R.drawable.ufi_heart_active).into(ivFav);
+                            Post.IDsofPostsLikedByCurrentUser.add(mPost.getObjectId());
+                        }
+                    });
+                }
+
             }
         });
 
@@ -89,6 +128,10 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getContext(), "Comment", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if (Post.IDsofPostsLikedByCurrentUser.contains(mPost.getObjectId())) {
+            Glide.with(getContext()).load(R.drawable.ufi_heart_active).into(ivFav);
+        }
     }
 
     @Override

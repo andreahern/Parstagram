@@ -100,8 +100,9 @@
             android:id="@+id/ivFav"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ufi_heart"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ufi_heart" />
 
         <TextView
             android:id="@+id/tvFavCount"

@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
+import com.habraham.parstagram.Like;
 import com.habraham.parstagram.Post;
 import com.habraham.parstagram.PostsAdapter;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
@@ -86,47 +88,59 @@ public class PostsFragment extends Fragment {
     }
 
     protected void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.setLimit(20);
-        query.addDescendingOrder(Post.KEY_CREATED_AT);
-        query.findInBackground(new FindCallback<Post>() {
+        Post.getPostsThatTheCurrentUserHasLiked(new FindCallback<Like>() {
             @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts: ", e);
-                    return;
+            public void done(List<Like> objects, ParseException e) {
+                Post.IDsofPostsLikedByCurrentUser.clear();
+                for (Like like : objects) {
+                    Post.IDsofPostsLikedByCurrentUser.add(like.getPost().getObjectId());
                 }
+                ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+                query.include(Post.KEY_USER);
+                query.setLimit(20);
+                query.addDescendingOrder(Post.KEY_CREATED_AT);
+                query.findInBackground(new FindCallback<Post>() {
+                    @Override
+                    public void done(List<Post> posts, ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Issue with getting posts: ", e);
+                            return;
+                        }
 
-                for (Post post : posts) {
-                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
-                }
-//                adapter.clear();
-                adapter.addAll(posts);
-                swipeContainer.setRefreshing(false);
+                        for (Post post : posts) {
+                            Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                        }
+
+                        adapter.addAll(posts);
+                        swipeContainer.setRefreshing(false);
+                    }
+                });
             }
         });
+
+
     }
 
-    protected void loadNextQueryPosts(int page) {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.setLimit(20);
-        query.addDescendingOrder(Post.KEY_CREATED_AT);
-        query.setSkip(20 * page);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting next posts: ", e);
-                    return;
-                }
+    protected void loadNextQueryPosts(final int page) {
+            ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+            query.include(Post.KEY_USER);
 
-                for (Post post : posts) {
-                    Log.i(TAG, "Next Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+            query.setLimit(20);
+            query.addDescendingOrder(Post.KEY_CREATED_AT);
+            query.setSkip(20 * page);
+            query.findInBackground(new FindCallback<Post>() {
+                @Override
+                public void done(List<Post> posts, ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Issue with getting next posts: ", e);
+                        return;
+                    }
+
+                    for (Post post : posts) {
+                        Log.i(TAG, "Next Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                    }
+                    adapter.addAll(posts);
                 }
-                adapter.addAll(posts);
-            }
-        });
+            });
     }
 }

@@ -11,6 +11,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Post.class);
+        ParseObject.registerSubclass(Like.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
         .applicationId("abe-parstagram")

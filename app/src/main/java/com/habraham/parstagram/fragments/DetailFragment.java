@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -59,6 +60,17 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         tvUsername.setOnClickListener(this);
 
         setPost(objectId);
+
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.menu_profile);
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStackImmediate();
+            }
+        });
     }
 
     @Override

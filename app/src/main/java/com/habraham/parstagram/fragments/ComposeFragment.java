@@ -166,6 +166,7 @@ public class ComposeFragment extends Fragment {
                 etDescription.setText(null);
                 ivPostImage.setImageResource(0);
                 pd.dismiss();
+                getFragmentManager().popBackStackImmediate();
             }
         });
     }

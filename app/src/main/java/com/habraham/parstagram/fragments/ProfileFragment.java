@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
 import com.habraham.parstagram.LoginActivity;
 import com.habraham.parstagram.models.Post;
@@ -25,6 +29,7 @@ import com.habraham.parstagram.adapters.PostsAdapter;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -41,8 +46,11 @@ public class ProfileFragment extends Fragment {
     SwipeRefreshLayout swipeContainer;
     List<Post> allPosts;
     EndlessRecyclerViewScrollListener scrollListener;
+    TextView tvUsername;
+    ImageView ivProfile;
 
-    public ProfileFragment() {}
+    public ProfileFragment() {
+    }
 
     // Create a new instance of ProfileFragment with args
     public static ProfileFragment newInstance(ParseUser user) {
@@ -94,7 +102,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_posts, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -102,6 +110,17 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rvPosts = view.findViewById(R.id.rvPosts);
         swipeContainer = view.findViewById(R.id.swipeContainer);
+
+        tvUsername = view.findViewById(R.id.tvUsername);
+        ivProfile = view.findViewById(R.id.ivProfile);
+
+        tvUsername.setText(user.getUsername());
+        ParseFile image = user.getParseFile("profilePic");
+        if (image == null)
+            Glide.with(getContext()).load(R.drawable.default_pic).transform(new CircleCrop()).into(ivProfile);
+        else
+            Glide.with(getContext()).load(user.getParseFile("profilePic").getUrl()).transform(new CircleCrop()).into(ivProfile);
+
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
@@ -127,13 +146,13 @@ public class ProfileFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(glm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadNextQueryPosts(allPosts.get(allPosts.size()-1).getCreatedAt());
+                loadNextQueryPosts(allPosts.get(allPosts.size() - 1).getCreatedAt());
             }
         };
 
         rvPosts.addOnScrollListener(scrollListener);
 
-        Toolbar toolbar = ((Toolbar)view.findViewById(R.id.toolbar));
+        Toolbar toolbar = ((Toolbar) view.findViewById(R.id.toolbar));
         toolbar.inflateMenu(R.menu.menu_profile);
 
         // Listens for when a toolbar menu item was been clicked

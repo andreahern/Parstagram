@@ -24,6 +24,7 @@ import com.habraham.parstagram.models.Comment;
 import com.habraham.parstagram.models.Like;
 import com.habraham.parstagram.models.Post;
 import com.habraham.parstagram.R;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,6 +34,7 @@ import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class DetailFragment extends Fragment implements View.OnClickListener {
@@ -41,6 +43,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
     String objectId;
     TextView tvUsername;
     TextView tvDescription;
+    TextView tvFavCount;
     TextView tvTime;
     ImageView ivProfile;
     ImageView ivPost;
@@ -61,6 +64,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
 
         tvUsername = view.findViewById(R.id.tvUsername);
         tvDescription = view.findViewById(R.id.tvDescription);
+        tvFavCount = view.findViewById(R.id.tvFavCount);
         tvTime = view.findViewById(R.id.tvTime);
         ivProfile = view.findViewById(R.id.ivProfile);
         ivPost = view.findViewById(R.id.ivProfileImage);
@@ -102,6 +106,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                             like.deleteInBackground();
                             Glide.with(getContext()).load(R.drawable.ufi_heart).into(ivFav);
                             Post.IDsofPostsLikedByCurrentUser.remove(mPost.getObjectId());
+                            tvFavCount.setText(""+(Integer.parseInt(tvFavCount.getText().toString()) - 1));
                         }
                     });
                 } else {
@@ -113,6 +118,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                         public void done(ParseException e) {
                             Glide.with(getContext()).load(R.drawable.ufi_heart_active).into(ivFav);
                             Post.IDsofPostsLikedByCurrentUser.add(mPost.getObjectId());
+                            tvFavCount.setText(""+(Integer.parseInt(tvFavCount.getText().toString()) + 1));
                         }
                     });
                 }
@@ -122,31 +128,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Comment", Toast.LENGTH_SHORT).show();
-//                final Comment comment = new Comment();
-//                comment.setContent("This is a comment");
-//                comment.setPost(mPost);
-//                comment.setUser(ParseUser.getCurrentUser());
-//                comment.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (mPost.getComments() == null) {
-//                            ArrayList<Comment> comments = new ArrayList<>();
-//                            comments.add(comment);
-//                            Log.i(TAG, "done: " + comments);
-//                            mPost.setComments(comments);
-//                        } else {
-//                            mPost.addComments(comment);
-//
-//                        }
-//                        mPost.saveInBackground(new SaveCallback() {
-//                            @Override
-//                            public void done(ParseException e) {
-//                                Log.i(TAG, "done: " + mPost.getComments());
-//                            }
-//                        });
-//                    }
-//                });
                 CommentsFragment commentsFragment = CommentsFragment.newInstance(mPost.getComments(), mPost);
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, commentsFragment).addToBackStack(null).commit();
@@ -156,6 +137,15 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         if (Post.IDsofPostsLikedByCurrentUser.contains(mPost.getObjectId())) {
             Glide.with(getContext()).load(R.drawable.ufi_heart_active).into(ivFav);
         }
+
+        ParseQuery<Like> likeQuery = ParseQuery.getQuery(Like.class);
+        likeQuery.whereEqualTo(Like.KEY_POST, mPost);
+        likeQuery.findInBackground(new FindCallback<Like>() {
+            @Override
+            public void done(List<Like> likes, ParseException e) {
+                tvFavCount.setText("" + likes.size());
+            }
+        });
     }
 
     @Override

@@ -99,6 +99,8 @@ public class CommentsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String commentContent = etComment.getText().toString();
+                if (commentContent.isEmpty()) return;
+
                 final Comment comment = new Comment();
                 comment.setContent(commentContent);
                 comment.setPost(post);
@@ -124,6 +126,8 @@ public class CommentsFragment extends Fragment {
                         });
                     }
                 });
+
+                etComment.setText(null);
             }
         });
     }

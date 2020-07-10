@@ -1,6 +1,7 @@
 package com.habraham.parstagram.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.habraham.parstagram.R;
 import com.habraham.parstagram.models.Comment;
 import com.habraham.parstagram.models.Post;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -82,6 +84,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         public void bind(Comment comment) throws ParseException {
             tvBody.setText(comment.fetchIfNeeded().getString(Comment.KEY_CONTENT));
+            ParseFile image = comment.getUser().fetchIfNeeded().getParseFile("profilePic");
+            if (image == null)
+                Glide.with(context).load(R.drawable.default_pic).transform(new CircleCrop()).into(ivProfileImage);
+            else
             Glide.with(context).load(comment.fetchIfNeeded().getParseUser(Comment.KEY_USER).fetchIfNeeded().getParseFile("profilePic").getUrl()).transform(new CircleCrop()).into(ivProfileImage);
         }
     }

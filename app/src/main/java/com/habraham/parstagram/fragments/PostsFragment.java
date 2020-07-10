@@ -118,6 +118,7 @@ public class PostsFragment extends Fragment {
     }
 
     protected void loadNextQueryPosts(final int page) {
+        Log.i(TAG, "loadNextQueryPosts: ");
             ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
             query.include(Post.KEY_USER);
 

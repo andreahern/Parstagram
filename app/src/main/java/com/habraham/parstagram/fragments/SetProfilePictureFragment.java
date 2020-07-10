@@ -49,6 +49,7 @@ public class SetProfilePictureFragment extends ComposeFragment {
             }
         });
 
+        // Progress Dialog to be displayed when api is being called
         final ProgressDialog pd = new ProgressDialog(getContext());
         pd.setTitle("Loading...");
         pd.setMessage("Please wait.");

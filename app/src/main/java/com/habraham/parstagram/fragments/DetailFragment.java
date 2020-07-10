@@ -74,7 +74,7 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         ivProfile.setOnClickListener(this);
         tvUsername.setOnClickListener(this);
 
-        setPost(objectId);
+        setPost();
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
@@ -155,7 +155,8 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
-    private void setPost(final String postID) {
+    // Set the content of the detail page
+    private void setPost() {
         tvUsername.setText(mPost.getUser().getUsername());
         tvDescription.setText(mPost.getDescription());
         tvTime.setText(setTime(mPost.getCreatedAt().toString()));

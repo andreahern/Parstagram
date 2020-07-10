@@ -83,6 +83,7 @@ public class PostsFragment extends Fragment {
         queryPosts();
     }
 
+    // Query the first 20 posts to be rendered
     protected void queryPosts() {
         Post.getPostsThatTheCurrentUserHasLiked(new FindCallback<Like>() {
             @Override
@@ -117,6 +118,7 @@ public class PostsFragment extends Fragment {
 
     }
 
+    // Query next set of posts
     protected void loadNextQueryPosts(final int page) {
         Log.i(TAG, "loadNextQueryPosts: ");
             ParseQuery<Post> query = ParseQuery.getQuery(Post.class);

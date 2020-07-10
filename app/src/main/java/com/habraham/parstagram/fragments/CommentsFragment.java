@@ -95,6 +95,8 @@ public class CommentsFragment extends Fragment {
         etComment = view.findViewById(R.id.etComment);
         btnSend = view.findViewById(R.id.btnSend);
 
+        // Add comment to Parse collection and as a reference to the post
+        // Add comment to RecyclerView
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

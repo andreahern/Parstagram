@@ -113,6 +113,7 @@ public class ComposeFragment extends Fragment {
     }
 
     @Override
+    // Handles retreiving image
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -144,6 +145,7 @@ public class ComposeFragment extends Fragment {
     }
 
 
+    // Save the newly created post
     private void savePost(String description, ParseUser currentUser, File photoFile, final ProgressDialog pd) {
         Post post = new Post();
         post.setDescription(description);

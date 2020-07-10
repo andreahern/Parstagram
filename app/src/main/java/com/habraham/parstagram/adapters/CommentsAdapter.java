@@ -24,7 +24,6 @@ import com.parse.ParseUser;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
-    private static final String TAG = "CommentsAdapter";
 
     private Context context;
     private List<Comment> comments;
@@ -36,28 +35,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
     @NonNull
     @Override
+    // Create a new view holder to contain a comment
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.comment_item, parent, false);
         return new ViewHolder(view);
     }
 
-    public void clear() {
-        comments.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items -- change to type used
-    public void addAll(List<Comment> list) {
-        comments.addAll(list);
-        notifyDataSetChanged();
-    }
-
+    // Add element to array and notify adapter so element will be rendered
     public void add(Comment comment) {
         comments.add(comment);
         notifyItemInserted(comments.size());
     }
 
     @Override
+    // Bind new data to a existing view holder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Comment comment = comments.get(position);
         try {
@@ -68,10 +59,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
     }
 
     @Override
+    // Get number of comments
     public int getItemCount() {
         return comments.size();
     }
 
+    // Define how a ViewHolder functions
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvBody;
         ImageView ivProfileImage;
@@ -82,6 +75,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
         }
 
+        // Helper function that binds the comment data to the view holder
         public void bind(Comment comment) throws ParseException {
             tvBody.setText(comment.fetchIfNeeded().getString(Comment.KEY_CONTENT));
             ParseFile image = comment.getUser().fetchIfNeeded().getParseFile("profilePic");

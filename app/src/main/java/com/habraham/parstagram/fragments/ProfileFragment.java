@@ -128,6 +128,7 @@ public class ProfileFragment extends Fragment {
         GridLayoutManager glm = new GridLayoutManager(getContext(), 3);
         rvPosts.setLayoutManager(glm);
 
+        // Pull down to refresh
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -135,7 +136,6 @@ public class ProfileFragment extends Fragment {
                 queryPosts();
             }
         });
-
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -149,7 +149,6 @@ public class ProfileFragment extends Fragment {
                 loadNextQueryPosts(allPosts.get(allPosts.size() - 1).getCreatedAt());
             }
         };
-
         rvPosts.addOnScrollListener(scrollListener);
 
         Toolbar toolbar = ((Toolbar) view.findViewById(R.id.toolbar));

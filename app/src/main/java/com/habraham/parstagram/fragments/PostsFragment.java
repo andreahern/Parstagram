@@ -16,7 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
 import com.habraham.parstagram.models.Like;
 import com.habraham.parstagram.models.Post;
-import com.habraham.parstagram.PostsAdapter;
+import com.habraham.parstagram.adapters.PostsAdapter;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;

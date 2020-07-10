@@ -1,4 +1,4 @@
-package com.habraham.parstagram;
+package com.habraham.parstagram.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.habraham.parstagram.R;
 import com.habraham.parstagram.fragments.DetailFragment;
 import com.habraham.parstagram.models.Post;
 import com.parse.ParseFile;

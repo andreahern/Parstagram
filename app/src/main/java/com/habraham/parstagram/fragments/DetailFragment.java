@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -115,7 +116,6 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
                         }
                     });
                 }
-
             }
         });
 
@@ -123,30 +123,33 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Comment", Toast.LENGTH_SHORT).show();
-                final Comment comment = new Comment();
-                comment.setContent("This is a comment");
-                comment.setPost(mPost);
-                comment.setUser(ParseUser.getCurrentUser());
-                comment.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (mPost.getComments() == null) {
-                            ArrayList<Comment> comments = new ArrayList<>();
-                            comments.add(comment);
-                            Log.i(TAG, "done: " + comments);
-                            mPost.setComments(comments);
-                        } else {
-                            mPost.addComments(comment);
-
-                        }
-                        mPost.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                Log.i(TAG, "done: " + mPost.getComments());
-                            }
-                        });
-                    }
-                });
+//                final Comment comment = new Comment();
+//                comment.setContent("This is a comment");
+//                comment.setPost(mPost);
+//                comment.setUser(ParseUser.getCurrentUser());
+//                comment.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (mPost.getComments() == null) {
+//                            ArrayList<Comment> comments = new ArrayList<>();
+//                            comments.add(comment);
+//                            Log.i(TAG, "done: " + comments);
+//                            mPost.setComments(comments);
+//                        } else {
+//                            mPost.addComments(comment);
+//
+//                        }
+//                        mPost.saveInBackground(new SaveCallback() {
+//                            @Override
+//                            public void done(ParseException e) {
+//                                Log.i(TAG, "done: " + mPost.getComments());
+//                            }
+//                        });
+//                    }
+//                });
+                CommentsFragment commentsFragment = CommentsFragment.newInstance(mPost.getComments(), mPost);
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, commentsFragment).addToBackStack(null).commit();
             }
         });
 

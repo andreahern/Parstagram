@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment;
+                // replace current viewed fragment with requested one
                 switch (menuItem.getItemId()) {
                     case R.id.Home:
                         fragment = new PostsFragment();

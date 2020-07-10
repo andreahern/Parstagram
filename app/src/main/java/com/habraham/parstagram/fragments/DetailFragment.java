@@ -19,22 +19,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.habraham.parstagram.Like;
-import com.habraham.parstagram.Post;
+import com.habraham.parstagram.models.Comment;
+import com.habraham.parstagram.models.Like;
+import com.habraham.parstagram.models.Post;
 import com.habraham.parstagram.R;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class DetailFragment extends Fragment implements View.OnClickListener {
@@ -126,6 +123,30 @@ public class DetailFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Comment", Toast.LENGTH_SHORT).show();
+                final Comment comment = new Comment();
+                comment.setContent("This is a comment");
+                comment.setPost(mPost);
+                comment.setUser(ParseUser.getCurrentUser());
+                comment.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (mPost.getComments() == null) {
+                            ArrayList<Comment> comments = new ArrayList<>();
+                            comments.add(comment);
+                            Log.i(TAG, "done: " + comments);
+                            mPost.setComments(comments);
+                        } else {
+                            mPost.addComments(comment);
+
+                        }
+                        mPost.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.i(TAG, "done: " + mPost.getComments());
+                            }
+                        });
+                    }
+                });
             }
         });
 

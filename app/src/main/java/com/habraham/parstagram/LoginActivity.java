@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user: " + username);
+
+        // Try to login user and push into main activity
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -78,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
 
+        // Try to sign up user and push into main activity
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ public class SetProfilePictureFragment extends ComposeFragment {
     Button btnTakePic;
     Button btnSave;
     ImageView ivProfileImage;
-
+    Toolbar toolbar;
     public SetProfilePictureFragment() {
         // Required empty public constructor
     }
@@ -39,6 +40,7 @@ public class SetProfilePictureFragment extends ComposeFragment {
         btnTakePic = view.findViewById(R.id.btnTakePic);
         btnSave = view.findViewById(R.id.btnSave);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        toolbar = view.findViewById(R.id.toolbar);
 
         btnTakePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,15 @@ public class SetProfilePictureFragment extends ComposeFragment {
                 }
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 saveProfile(currentUser, photoFile, pd);
+            }
+        });
+
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStackImmediate();
             }
         });
     }

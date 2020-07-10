@@ -1,5 +1,6 @@
-package com.habraham.parstagram;
+package com.habraham.parstagram.models;
 
+import com.habraham.parstagram.models.Post;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;

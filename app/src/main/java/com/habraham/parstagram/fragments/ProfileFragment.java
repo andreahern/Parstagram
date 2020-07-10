@@ -20,11 +20,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
 import com.habraham.parstagram.LoginActivity;
-import com.habraham.parstagram.Post;
+import com.habraham.parstagram.models.Post;
 import com.habraham.parstagram.PostsAdapter;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -45,6 +44,7 @@ public class ProfileFragment extends Fragment {
 
     public ProfileFragment() {}
 
+    // Create a new instance of ProfileFragment with args
     public static ProfileFragment newInstance(ParseUser user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment {
         } else queryPosts();
     }
 
+    // Query initial posts to be displayed
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
@@ -75,6 +76,8 @@ public class ProfileFragment extends Fragment {
 
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
+
+        // Makes query to parse backend
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
@@ -120,6 +123,7 @@ public class ProfileFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
+        // Listens for when user scrolls to the bottom
         scrollListener = new EndlessRecyclerViewScrollListener(glm) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -132,6 +136,7 @@ public class ProfileFragment extends Fragment {
         Toolbar toolbar = ((Toolbar)view.findViewById(R.id.toolbar));
         toolbar.inflateMenu(R.menu.menu_profile);
 
+        // Listens for when a toolbar menu item was been clicked
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -155,9 +160,11 @@ public class ProfileFragment extends Fragment {
                 return false;
             }
         });
+
         queryPosts();
     }
 
+    // Loads next set of data once user scrolls to the end
     protected void loadNextQueryPosts(Date maxCreatedAt) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);

@@ -5,28 +5,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.habraham.parstagram.EndlessRecyclerViewScrollListener;
-import com.habraham.parstagram.Like;
-import com.habraham.parstagram.Post;
+import com.habraham.parstagram.models.Like;
+import com.habraham.parstagram.models.Post;
 import com.habraham.parstagram.PostsAdapter;
 import com.habraham.parstagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PostsFragment extends Fragment {
